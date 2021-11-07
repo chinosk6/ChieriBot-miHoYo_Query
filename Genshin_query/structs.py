@@ -232,7 +232,7 @@ class HonKai3ReportsBattleBoss(BaseModel):
     avatar: str
 
 class HonKai3BattleFieldReportsBattleInfo(BaseModel):
-    elf: Optional[HonKai3ReportsBattleElf]  # 武装人偶
+    elf: HonKai3ReportsBattleElf  # 武装人偶
     lineup: List[HonKai3ReportsBattleLineup]
     boss: HonKai3ReportsBattleBoss
     score: int
@@ -257,7 +257,7 @@ class OldAbyssReport(BaseModel):
     boss: HonKai3ReportsBattleBoss
     level: str  # {"A": "红莲", "B": "苦痛", "C": "原罪", "D": "禁忌"}
     reward_type: str  # Relegation - 保级(不太对劲)
-    elf: Optional[HonKai3ReportsBattleElf]
+    elf: HonKai3ReportsBattleElf
     type: str  # {"Quantum": "量子奇点", "OW": "迪拉克之海"}
 
 class OldAbyss(BaseModel):  # 旧深渊
@@ -272,7 +272,7 @@ class NewAbyssReport(BaseModel):
     rank: int  # 排名
     settled_cup_number: int  # 杯数变化
     cup_number: int  # 杯数
-    elf: Optional[HonKai3ReportsBattleElf]
+    elf: HonKai3ReportsBattleElf
     level: int  # ["-", "禁忌", "原罪1", "原罪2", "原罪3", "苦痛1", "苦痛2", "苦痛3", "红莲", "寂灭"]
     settled_level: int  # 段位, 同上
 
@@ -281,7 +281,7 @@ class NewAbyss(BaseModel):  # 新深渊
 
 
 class HonKaiWeeklyReport(BaseModel):  # 周报
-    favorite_character: HonKai3ReportsBattleLineup
+    favorite_character: Optional[HonKai3ReportsBattleLineup]
     gold_income: int  # 金币收入
     gold_expenditure: int  # 金币支出
     active_day_number: int  # 签到天数

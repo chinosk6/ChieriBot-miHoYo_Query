@@ -405,7 +405,8 @@ class HonKaiGenerate:
                  new_abyss: Optional[NewAbyss]):
         self.mysdata = mysdata
         self.userinfo = userinfo
-        self.userinfo.weeklyreport.favorite_character.name = self.userinfo.weeklyreport.favorite_character.name.replace("·", "•")
+        if self.userinfo.weeklyreport.favorite_character is not None:
+            self.userinfo.weeklyreport.favorite_character.name = self.userinfo.weeklyreport.favorite_character.name.replace("·", "•")
         self.old_abyss = old_abyss
         self.new_abyss = new_abyss
         self.spath = os.path.split(__file__)[0]  # .py真实位置
@@ -620,7 +621,9 @@ class HonKaiGenerate:
                   font=font)
         draw.text(xy=(725, 1102 + 58), text=f"消耗体力: {self.userinfo.weeklyreport.expended_physical_power}",
                   fill=(37, 18, 38), font=font)
-        draw.text(xy=(725, 1102 + 58 * 2), text=f"上周劳模: {self.userinfo.weeklyreport.favorite_character.name}",
+        favorite_char = self.userinfo.weeklyreport.favorite_character.name if \
+            self.userinfo.weeklyreport.favorite_character is not None else '-'
+        draw.text(xy=(725, 1102 + 58 * 2), text=f"上周劳模: {favorite_char}",
                   fill=(37, 18, 38), font=font)
 
         count = 0
