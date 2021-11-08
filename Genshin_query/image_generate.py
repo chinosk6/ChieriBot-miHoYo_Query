@@ -514,13 +514,21 @@ class HonKaiGenerate:
             levelstr = {"A": "红莲", "B": "苦痛", "C": "原罪", "D": "禁忌"}
 
             count = 0
-            for battle in self.old_abyss.reports:
+            max_time = 0
+            battle = None
+            for _battle in self.old_abyss.reports:
+                if int(_battle.time_second) > max_time:
+                    max_time = int(_battle.time_second)
+                    battle = _battle
+
+            if battle is not None:
                 im = self.url2pilimg(battle.boss.avatar)
                 piltools.paste_image(pt, im, 603, 32, 384, 150, with_mask=True)  # boss图片
 
                 font = ImageFont.truetype(font=f"{spath}/res_honkai/font/msyhb.ttf", size=22)
                 ptstr = f"{areastr[battle.area]} - {levelstr[battle.level]} - {typestr[battle.type]}    " \
-                        f"{battle.boss.name.replace('·', '•')}    得分: {battle.score}"
+                        f"{battle.boss.name.replace('·', '•')}    得分: {battle.score}    " \
+                        f"结算时间: {timestamp_to_text(int(battle.time_second))}"
                 draw.text(xy=(26, 21), text=ptstr, fill=(255, 255, 255), font=font)  # 标题
 
                 for i in battle.lineup:
@@ -534,18 +542,25 @@ class HonKaiGenerate:
                     im = self.draw_avatar(_im, "", bgimg=Image.open(f"{spath}/res_honkai/icon_circle_i.png"))
                     piltools.paste_image(pt, im, 364, 80, 84, 84, with_mask=True)
 
-                break
 
         else:  # 新深渊
             levelstr = ["-", "禁忌", "原罪1", "原罪2", "原罪3", "苦痛1", "苦痛2", "苦痛3", "红莲", "寂灭"]
             count = 0
-            for battle in self.new_abyss.reports:
+            max_time = 0
+            battle = None
+            for _battle in self.new_abyss.reports:
+                if int(_battle.updated_time_second) > max_time:
+                    max_time = int(_battle.updated_time_second)
+                    battle = _battle
+
+            if battle is not None:
                 im = self.url2pilimg(battle.boss.avatar)
                 piltools.paste_image(pt, im, 603, 32, 384, 150, with_mask=True)  # boss图片
 
                 font = ImageFont.truetype(font=f"{spath}/res_honkai/font/msyhb.ttf", size=22)
                 ptstr = f"终极区 - {levelstr[battle.level]}    " \
-                        f"{battle.boss.name.replace('·', '•')}    得分: {battle.score}"
+                        f"{battle.boss.name.replace('·', '•')}    得分: {battle.score}    " \
+                        f"结算时间: {timestamp_to_text(int(battle.updated_time_second))}"
                 draw.text(xy=(26, 21), text=ptstr, fill=(255, 255, 255), font=font)  # 标题
 
                 draw.text(xy=(487, 78), text=f"段位: {levelstr[battle.settled_level]}", fill=(255, 255, 255), font=font)
@@ -565,7 +580,6 @@ class HonKaiGenerate:
                     im = self.draw_avatar(_im, "", bgimg=Image.open(f"{spath}/res_honkai/icon_circle_i.png"))
                     piltools.paste_image(pt, im, 364, 80, 84, 84, with_mask=True)
 
-                break
 
         return pt
 
@@ -627,15 +641,21 @@ class HonKaiGenerate:
                   fill=(37, 18, 38), font=font)
 
         count = 0
-        for battle in self.userinfo.battlefields:
+        _max_time = 0
+        battle = None
+        for _battle in self.userinfo.battlefields:  # 战场
+            if int(_battle.time_second) > _max_time:
+                _max_time = int(_battle.time_second)
+                battle = _battle
+
+        if battle is not None:
             for i in battle.battle_infos:
                 im = self.draw_battlefield(i)
                 piltools.paste_image(pt, im, 181, 1449 + 251 * count, 987, 215, with_mask=True)
                 count += 1
 
-            break
 
-        im = self.draw_abyss()
+        im = self.draw_abyss()  # 深渊
         piltools.paste_image(pt, im, 181, 2360)
 
         savename = ''.join(random.sample('zyxwvutsrqponmlkjihgfedcba', 8)) + ".jpg"
