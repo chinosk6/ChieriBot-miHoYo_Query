@@ -246,7 +246,7 @@ class HonKai3BattleFieldReports(BaseModel):
     time_second: str  # 捏妈, str
 
 class HonKai3BattleFieldInfo(BaseModel):  # 战场
-    reports: List[HonKai3BattleFieldReports]
+    reports: Optional[List[HonKai3BattleFieldReports]]
 
 
 class OldAbyssReport(BaseModel):
